@@ -15,10 +15,9 @@ from datetime import datetime
 from form_designer.forms import DesignedForm
 from form_designer.models import FormDefinition, FormLog
 from form_designer.uploads import handle_uploaded_files
-from form_designer.exceptions import HttpRedirectException
 
 
-def process_form(request, form_definition, extra_context={}, in_cms=False):
+def process_form(request, form_definition, extra_context={}, disable_redirection=False):
     context = extra_context
     success_message = form_definition.success_message or _('Thank you, the data was submitted successfully.')
     error_message = form_definition.error_message or _('The data could not be submitted, please try again.')
@@ -46,16 +45,13 @@ def process_form(request, form_definition, extra_context={}, in_cms=False):
             if form_definition.mail_to:
                 form_definition.send_mail(form, files)
 
-            if form_definition.success_redirect:
+            if form_definition.success_redirect and not disable_redirection:
                 if form_definition.redirection_url:
                     url = form_definition.redirection_url
                 else:
                     url = form_definition.action or '?'
                 #only want to raise a redirect if the middleware is set up to handle it
-                if in_cms and 'form_designer.middleware.RedirectMiddleware' in settings.MIDDLEWARE_CLASSES:
-                    raise HttpRedirectException(url, "Redirect")
-                elif not in_cms:
-                    return HttpResponseRedirect(url)
+                return HttpResponseRedirect(url)
             if form_definition.success_clear:
                 form = DesignedForm(form_definition) # clear form
         else:

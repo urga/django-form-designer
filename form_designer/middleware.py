@@ -13,6 +13,5 @@ class RedirectMiddleware(object):
                 return
 
         if isinstance(exception, HttpRedirectException):
-            url = exception.url
-            return HttpResponseRedirect(url)
+            return exception.response
 
