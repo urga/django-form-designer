@@ -7,28 +7,33 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
-        # Adding model 'FormValue'
-        db.create_table('form_designer_formvalue', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('form_log', self.gf('django.db.models.fields.related.ForeignKey')(related_name='values', to=orm['form_designer.FormLog'])),
-            ('field_name', self.gf('django.db.models.fields.SlugField')(max_length=255, db_index=True)),
-            ('value', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('form_designer', ['FormValue'])
+        from form_designer.models import FormLog
+        from picklefield import PickledObjectField
+        tmp_data = PickledObjectField(null=True, blank=True)
+        tmp_data.contribute_to_class(FormLog, 'tmp_data')
 
-        # Adding field 'FormLog.created_by'
-        db.add_column('form_designer_formlog', 'created_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True), keep_default=False)
-        
-        db.rename_column('form_designer_formlog', 'data', 'tmp_data')
-        
+        for log in FormLog.objects.all():
+            log.set_data(log.tmp_data)
+            log.save()
+
+        # Deleting field 'FormLog.data'
+        db.delete_column('form_designer_formlog', 'data')
+        db.delete_column('form_designer_formlog', 'tmp_data')
+
 
     def backwards(self, orm):
-        db.delete_table('form_designer_formvalue')
-        db.delete_column('form_designer_formlog', 'created_by_id')
+        # Adding field 'FormLog.data'
+        db.add_column('form_designer_formlog', 'tmp_data', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
         
-        db.rename_column('form_designer_formlog', 'tmp_data', 'data')
+        from form_designer.models import FormLog
+        from picklefield import PickledObjectField
+        tmp_data = PickledObjectField(null=True, blank=True)
+        tmp_data.contribute_to_class(FormLog, 'tmp_data')
 
+        for log in FormLog.objects.all():
+            log.data = log.get_data()
+            raise Exception(log.data)
+            log.save()
 
 
     models = {
@@ -124,7 +129,6 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'FormLog'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'tmp_data': ('picklefield.fields.PickledObjectField', [], {'null': 'True', 'blank': 'True'}),
             'form_definition': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'to': "orm['form_designer.FormDefinition']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
