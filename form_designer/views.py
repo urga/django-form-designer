@@ -56,7 +56,7 @@ def process_form(request, form_definition, extra_context={}, disable_redirection
                 form = DesignedForm(form_definition) # clear form
         else:
             form_error = True
-            messages.error(request, error_message)
+            #messages.error(request, error_message)
     else:
         if form_definition.allow_get_initial:
             form = DesignedForm(form_definition, initial_data=request.GET)
