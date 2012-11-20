@@ -1,5 +1,3 @@
-import os
-
 from django import forms
 from django.forms import widgets
 from django.conf import settings as django_settings
@@ -69,6 +67,6 @@ class FormDefinitionForm(forms.ModelForm):
         else:
             plugins = ['js/jquery.js'] + plugins
         js.extend(
-            [os.path.join(settings.STATIC_URL, path) for path in plugins])
+            ['/'.join((settings.STATIC_URL, path)) for path in plugins])
         return forms.Media(js=js)
     media = property(_media)
