@@ -7,6 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Data is migrated here, see 0008_ for structure
         from form_designer.models import FormLog
         from picklefield import PickledObjectField
         tmp_data = PickledObjectField(null=True, blank=True)
@@ -16,24 +17,15 @@ class Migration(SchemaMigration):
             log.set_data(log.tmp_data)
             log.save()
 
-        # Deleting field 'FormLog.data'
-        db.delete_column('form_designer_formlog', 'data')
+        # Clean up
         db.delete_column('form_designer_formlog', 'tmp_data')
 
 
     def backwards(self, orm):
-        # Adding field 'FormLog.data'
+        # Structure is back-migrated here, see 0008_ for data (and cleanup)
+        # (because we can't use a column we add in this transaction)
         db.add_column('form_designer_formlog', 'tmp_data', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True), keep_default=False)
         
-        from form_designer.models import FormLog
-        from picklefield import PickledObjectField
-        tmp_data = PickledObjectField(null=True, blank=True)
-        tmp_data.contribute_to_class(FormLog, 'tmp_data')
-
-        for log in FormLog.objects.all():
-            log.data = log.get_data()
-            raise Exception(log.data)
-            log.save()
 
 
     models = {
