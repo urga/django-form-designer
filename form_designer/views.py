@@ -6,6 +6,7 @@ from django.conf import settings
 from form_designer import settings as app_settings
 from django.contrib import messages
 from django.core.context_processors import csrf
+from django.conf import settings
 
 import os
 import random
@@ -43,13 +44,19 @@ def process_form(request, form_definition, extra_context={}, disable_redirection
                 form_definition.log(form, request.user)
             if form_definition.mail_to:
                 form_definition.send_mail(form, files)
+
             if form_definition.success_redirect and not disable_redirection:
-                return HttpResponseRedirect(form_definition.action or '?')
+                if form_definition.redirection_url:
+                    url = form_definition.redirection_url
+                else:
+                    url = form_definition.action or '?'
+                #only want to raise a redirect if the middleware is set up to handle it
+                return HttpResponseRedirect(url)
             if form_definition.success_clear:
                 form = DesignedForm(form_definition) # clear form
         else:
             form_error = True
-            messages.error(request, error_message)
+            #messages.error(request, error_message)
     else:
         if form_definition.allow_get_initial:
             form = DesignedForm(form_definition, initial_data=request.GET)

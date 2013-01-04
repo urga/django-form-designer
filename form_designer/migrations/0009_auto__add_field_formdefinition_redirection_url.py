@@ -7,39 +7,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Structure is migrated here, see 0008b_ for data (and cleanup)
         
-        # Adding model 'FormValue'
-        db.create_table('form_designer_formvalue', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('form_log', self.gf('django.db.models.fields.related.ForeignKey')(related_name='values', to=orm['form_designer.FormLog'])),
-            ('field_name', self.gf('django.db.models.fields.SlugField')(max_length=255, db_index=True)),
-            ('value', self.gf('picklefield.fields.PickledObjectField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('form_designer', ['FormValue'])
+        # Adding field 'FormDefinition.redirection_url'
+        db.add_column('form_designer_formdefinition', 'redirection_url', self.gf('django.db.models.fields.URLField')(max_length=255, null=True, blank=True), keep_default=False)
 
-        # Adding field 'FormLog.created_by'
-        db.add_column('form_designer_formlog', 'created_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True, blank=True), keep_default=False)
-        
-        db.rename_column('form_designer_formlog', 'data', 'tmp_data')
-        
 
     def backwards(self, orm):
-        # Data is back-migrated here, see 0008b_ for structure
-        from form_designer.models import FormLog
-        from picklefield import PickledObjectField
-        tmp_data = PickledObjectField(null=True, blank=True)
-        tmp_data.contribute_to_class(FormLog, 'tmp_data')
-
-        for log in FormLog.objects.all():
-            log.tmp_data = log.get_data()
-            log.save()
         
-        # Clean up
-        db.delete_table('form_designer_formvalue')
-        db.delete_column('form_designer_formlog', 'created_by_id')
-        db.rename_column('form_designer_formlog', 'tmp_data', 'data')
-
+        # Deleting field 'FormDefinition.redirection_url'
+        db.delete_column('form_designer_formdefinition', 'redirection_url')
 
 
     models = {
@@ -98,6 +74,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
             'private_hash': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '40'}),
             'public_hash': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '40'}),
+            'redirection_url': ('django.db.models.fields.URLField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'require_hash': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'save_uploaded_files': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'submit_label': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -135,7 +112,6 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'FormLog'},
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'created_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
-            'tmp_data': ('picklefield.fields.PickledObjectField', [], {'null': 'True', 'blank': 'True'}),
             'form_definition': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logs'", 'to': "orm['form_designer.FormDefinition']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },

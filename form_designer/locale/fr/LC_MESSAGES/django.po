@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-01-19 20:56-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: SIMON CHARETTE <scharette@reptiletech.com>\n"
+"PO-Revision-Date: 2012-12-07 19:43+0100\n"
+"Last-Translator: David Marclay <david.marclay@reason-systems.com>\n"
 "Language-Team: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 
-#: admin.py:27 admin.py:38
+#: admin.py:27
+#: admin.py:38
 msgid "Basic"
 msgstr "Base"
 
@@ -23,7 +24,8 @@ msgstr "Base"
 msgid "Display"
 msgstr "Affichage"
 
-#: admin.py:29 settings.py:10
+#: admin.py:29
+#: settings.py:10
 msgid "Text"
 msgstr "Texte"
 
@@ -31,7 +33,8 @@ msgstr "Texte"
 msgid "Numbers"
 msgstr "Nombres"
 
-#: admin.py:31 settings.py:23
+#: admin.py:31
+#: settings.py:23
 msgid "Regex"
 msgstr "Expression régulière"
 
@@ -59,20 +62,28 @@ msgstr "Gabarits"
 msgid "Messages"
 msgstr "Messages"
 
-#: admin.py:63 admin.py:102 admin.py:147 models.py:60 models.py:173
+#: admin.py:63
+#: admin.py:102
+#: admin.py:147
+#: models.py:60
+#: models.py:173
 #: contrib/cms_plugins/form_designer_form/cms_plugins.py:14
 msgid "Form"
 msgstr "Formulaire"
 
-#: admin.py:78 models.py:174
+#: admin.py:78
+#: models.py:174
 msgid "Data"
 msgstr "Données"
 
-#: admin.py:104 admin.py:149 models.py:172
+#: admin.py:104
+#: admin.py:149
+#: models.py:172
 msgid "Created"
 msgstr "Créé"
 
-#: admin.py:106 admin.py:151
+#: admin.py:106
+#: admin.py:151
 msgid "ID"
 msgstr "ID"
 
@@ -102,7 +113,8 @@ msgstr "Ce type de champ necessite une expression régulière."
 msgid "This field class requires a model."
 msgstr "Cette classe de champ nécessite un modèle."
 
-#: models.py:35 models.py:187
+#: models.py:35
+#: models.py:187
 msgid "name"
 msgstr "Nom"
 
@@ -112,9 +124,7 @@ msgstr "Obscurcir l'URL vers ce formulaire"
 
 #: models.py:36
 msgid "If enabled, the form can only be reached via a secret URL."
-msgstr ""
-"Si activé, il sera seulement possible d'atteindre le formulaire via une URL "
-"secrète."
+msgstr "Si activé, il sera seulement possible d'atteindre le formulaire via une URL secrète."
 
 #: models.py:39
 msgid "title"
@@ -129,17 +139,8 @@ msgid "target URL"
 msgstr "URL cible"
 
 #: models.py:41
-msgid ""
-"If you leave this empty, the page where the form resides will be requested, "
-"and you can use the mail form and logging features. You can also send data "
-"to external sites: For instance, enter \"http://www.google.ch/search\" to "
-"create a search form."
-msgstr ""
-"Si vous laisser ce champs vide, le formulaire sera envoyé vers la page où il "
-"se trouve et vous pourrez utiliser les fonctionnalités de courriel et de "
-"sauvegarde. Vous pouvez aussi envoyer les données saisies vers un site "
-"externe: Par exemple, entrez \"http://www.google.fr/search\" pour créer un "
-"formulaire de recherche."
+msgid "If you leave this empty, the page where the form resides will be requested, and you can use the mail form and logging features. You can also send data to external sites: For instance, enter \"http://www.google.ch/search\" to create a search form."
+msgstr "Si vous laisser ce champs vide, le formulaire sera envoyé vers la page où il se trouve et vous pourrez utiliser les fonctionnalités de courriel et de sauvegarde. Vous pouvez aussi envoyer les données saisies vers un site externe: Par exemple, entrez \"http://www.google.fr/search\" pour créer un formulaire de recherche."
 
 #: models.py:42
 msgid "send form data to e-mail address"
@@ -155,7 +156,7 @@ msgstr "Sujet du courriel"
 
 #: models.py:45
 msgid "Send uploaded files as email attachments"
-msgstr "Joindre les fichiers téléversés aux courriels."
+msgstr "Joindre les fichiers téléversés aux courriels"
 
 #: models.py:46
 msgid "method"
@@ -187,9 +188,7 @@ msgstr "Sauver les fichiers téléversés"
 
 #: models.py:51
 msgid "Saves all uploaded files using server storage."
-msgstr ""
-"Sauve tous les fichiers téléversés en utilisant la mécanique de stockage du "
-"serveur."
+msgstr "Sauve tous les fichiers téléversés en utilisant la mécanique de stockage du serveur."
 
 #: models.py:52
 msgid "HTTP redirect after successful submission"
@@ -204,31 +203,16 @@ msgid "allow initial values via URL"
 msgstr "Permettre l'assignation de valeurs via l'URL"
 
 #: models.py:54
-msgid ""
-"If enabled, you can fill in form fields by adding them to the query string."
-msgstr ""
-"Si activé, vous pouvez populer les champs du formulaire en les ajoutants à "
-"la chaîne de requête: Par exemple \"http://chemin.vers/mon/formulaire?"
-"prenom=Serge"
+msgid "If enabled, you can fill in form fields by adding them to the query string."
+msgstr "Si activé, vous pouvez préremplir les champs du formulaire en les ajoutants à la chaîne de requête: Par exemple \"http://chemin.vers/mon/formulaire?prenom=Serge"
 
 #: models.py:55
 msgid "message template"
 msgstr "Gabarit de message de courriel"
 
 #: models.py:55
-msgid ""
-"Your form fields are available as template context. Example: \"{{ message }}"
-"\" if you have a field named `message`. To iterate over all fields, use the "
-"variable `data` (a list containing a dictionary for each form field, each "
-"containing the elements `name`, `label`, `value`)."
-msgstr ""
-"Vos champs de formulaire sont accessibles sous forme de variables de "
-"gabarits.Par exemple: \"{{ message }}\" si vous avez un champ nommé &laquo;"
-"&thinsp;message&thinsp;&raquo;.Pour itérer sur l'ensemble des champs, "
-"utilisez la variables &laquo;&thinsp;data&thinsp;&raquo; (&thinsp;une liste "
-"de dictionnaires associé à chaque champ avec les clefs &laquo;&thinsp;"
-"name&thinsp;&raquo;, &laquo;&thinsp;label&thinsp;&raquo;, &laquo;&thinsp;"
-"value&thinsp;&raquo;&thinsp;)"
+msgid "Your form fields are available as template context. Example: \"{{ message }}\" if you have a field named `message`. To iterate over all fields, use the variable `data` (a list containing a dictionary for each form field, each containing the elements `name`, `label`, `value`)."
+msgstr "Vos champs de formulaire sont accessibles sous forme de variables de gabarits.Par exemple: \"{{ message }}\" si vous avez un champ nommé &laquo;&thinsp;message&thinsp;&raquo;.Pour itérer sur l'ensemble des champs, utilisez la variables &laquo;&thinsp;data&thinsp;&raquo; (&thinsp;une liste de dictionnaires associé à chaque champ avec les clefs &laquo;&thinsp;name&thinsp;&raquo;, &laquo;&thinsp;label&thinsp;&raquo;, &laquo;&thinsp;value&thinsp;&raquo;&thinsp;)"
 
 #: models.py:56
 msgid "form template"
@@ -304,23 +288,23 @@ msgstr "Un libellé par ligne"
 
 #: models.py:198
 msgid "max. length"
-msgstr "Longueur maximale"
+msgstr "Longueur max."
 
 #: models.py:199
 msgid "min. length"
-msgstr "Longueur minimale"
+msgstr "Longueur min."
 
 #: models.py:200
 msgid "max. value"
-msgstr "Valeur maximale"
+msgstr "Valeur max."
 
 #: models.py:201
 msgid "min. value"
-msgstr "Valeur minimale"
+msgstr "Valeur min."
 
 #: models.py:202
 msgid "max. digits"
-msgstr "Nombre de chiffres maximum"
+msgstr "Nombre de chiffres max."
 
 #: models.py:203
 msgid "decimal places"
@@ -398,9 +382,10 @@ msgstr "Choix Multiple de Modèle"
 msgid "File"
 msgstr "Fichier"
 
-#: settings.py:29 settings.py:37
+#: settings.py:29
+#: settings.py:37
 msgid "Default"
-msgstr "Défaut"
+msgstr "Par défaut"
 
 #: settings.py:30
 msgid "Text area"
@@ -440,16 +425,16 @@ msgstr "implémentation personnalisée"
 
 #: uploads.py:20
 msgid "This field is required."
-msgstr "Cette classe de champ nécessite un modèle."
+msgstr "Ce champs est obligatoire."
 
 #: uploads.py:25
 msgid "This file type is not allowed."
-msgstr ""
+msgstr "Le type de fichier n'est pas autorisé."
 
 #: uploads.py:27
 #, python-format
 msgid "Please keep file size under %(max_size)s. Current size is %(size)s."
-msgstr ""
+msgstr "Merci de ne pas dépasser la taille maximale de %(max_size)s. Taille actuelle : %(size)s."
 
 #: views.py:21
 msgid "Thank you, the data was submitted successfully."
@@ -486,3 +471,4 @@ msgstr "oui"
 #: templatetags/friendly.py:18
 msgid "no"
 msgstr "non"
+

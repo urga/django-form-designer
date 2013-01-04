@@ -1,10 +1,8 @@
-import os.path
-
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.core.files.storage import get_storage_class
 
-STATIC_URL = os.path.join(getattr(settings, 'STATIC_URL', settings.MEDIA_URL), 'form_designer')
+STATIC_URL = '/'.join((getattr(settings, 'STATIC_URL', settings.MEDIA_URL).rstrip('/'), 'form_designer'))
 
 FIELD_CLASSES = getattr(settings, 'FORM_DESIGNER_FIELD_CLASSES', (
     ('django.forms.CharField', _('Text')),
@@ -33,7 +31,7 @@ WIDGET_CLASSES = getattr(settings, 'FORM_DESIGNER_WIDGET_CLASSES', (
     ('django.forms.widgets.RadioSelect', _('Radio button')),
 ))
 
-EXPORTER_CLASSES = getattr(settings, 'FORM_DESIGNER_WIDGET_CLASSES', (
+EXPORTER_CLASSES = getattr(settings, 'FORM_DESIGNER_EXPORTER_CLASSES', (
     'form_designer.contrib.exporters.csv_exporter.CsvExporter',
     'form_designer.contrib.exporters.xls_exporter.XlsExporter',
 ))

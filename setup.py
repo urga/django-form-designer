@@ -1,6 +1,7 @@
 # encoding=utf8
 import os
-from distutils.core import setup
+from setuptools import setup
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -8,16 +9,16 @@ def read(fname):
 README = read('README.rst')
 
 setup(
-    name = "django-form-designer",
-    version = "0.7.0",
-    url = 'http://github.com/philomat/django-form-designer',
-    license = 'BSD',
-    description = "Design contact forms, search forms etc from the Django admin, without writing any code. Integrates with Django CMS.",
-    long_description = README,
+    name="django-form-designer",
+    version="0.7.0",
+    url='http://github.com/MagicSolutions/django-form-designer',
+    license='BSD',
+    description="Design contact forms, search forms etc from the Django admin, without writing any code. Integrates with Django CMS.",
+    long_description=README,
 
-    author = 'Samuel Luescher',
-    author_email = 'sam at luescher dot org',
-    packages = [
+    author='Samuel Luescher',
+    author_email='sam at luescher dot org',
+    packages=[
         'form_designer',
         'form_designer.migrations',
         'form_designer.templatetags',
@@ -26,7 +27,7 @@ setup(
         'form_designer.contrib.cms_plugins',
         'form_designer.contrib.cms_plugins.form_designer_form',
     ],
-    package_data = {
+    package_data={
         'form_designer': [
             'static/form_designer/js/*.js',
             'templates/admin/form_designer/formlog/change_list.html',
@@ -37,7 +38,7 @@ setup(
             'locale/*/LC_MESSAGES/*',
         ],
     },
-    classifiers = [
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',
@@ -46,7 +47,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP',
     ],
-    install_requires = [
+    install_requires=[
         'django-picklefield',
     ],
 )
