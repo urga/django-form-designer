@@ -19,8 +19,8 @@ class DesignedForm(forms.Form):
         self.fields[form_definition.submit_flag_name] = forms.BooleanField(required=False, initial=1, widget=widgets.HiddenInput)
 
     def add_defined_field(self, def_field, initial_data=None):
-        if initial_data and initial_data.has_key(def_field.name):
-            if not def_field.field_class in ('django.forms.MultipleChoiceField', 'django.forms.ModelMultipleChoiceField'):
+        if initial_data and def_field.name in initial_data:
+            if def_field.field_class not in ('django.forms.MultipleChoiceField', 'django.forms.ModelMultipleChoiceField'):
                 def_field.initial = initial_data.get(def_field.name)
             else:
                 def_field.initial = initial_data.getlist(def_field.name)
@@ -31,7 +31,7 @@ class DesignedForm(forms.Form):
 
     def clean(self):
         return clean_files(self)
-        
+
 
 class FormDefinitionFieldInlineForm(forms.ModelForm):
     class Meta:
