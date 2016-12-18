@@ -3,9 +3,7 @@ import hashlib, uuid
 from decimal import Decimal
 
 from django.db import models
-from django.utils.translation import ugettext, ugettext_lazy as _
-from django.forms import widgets
-from django.core.mail import send_mail
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings as django_settings
 from django.contrib.auth.models import User
 from django.utils.datastructures import SortedDict
@@ -24,7 +22,7 @@ class FormValueDict(dict):
         self['value'] = value
         self['label'] = label
         super(FormValueDict, self).__init__()
-        
+
 
 class FormDefinition(models.Model):
     name = models.SlugField(_('name'), max_length=255, unique=True)
@@ -65,7 +63,6 @@ class FormDefinition(models.Model):
 
     def get_field_dict(self):
         field_dict = SortedDict()
-        names = []
         for field in self.formdefinitionfield_set.all():
             field_dict[field.name] = field
         return field_dict
@@ -166,7 +163,7 @@ class FormDefinition(models.Model):
     @property
     def submit_flag_name(self):
         name = settings.SUBMIT_FLAG_NAME % self.name
-        # make sure we are not overriding one of the actual form fields 
+        # make sure we are not overriding one of the actual form fields
         while self.formdefinitionfield_set.filter(name__exact=name).count() > 0:
             name += '_'
         return name
@@ -215,7 +212,7 @@ class FormDefinitionField(models.Model):
     def ____init__(self, field_class=None, name=None, required=None, widget=None, label=None, initial=None, help_text=None, *args, **kwargs):
         super(FormDefinitionField, self).__init__(*args, **kwargs)
         self.name = name
-        self.field_class = field_class  
+        self.field_class = field_class
         self.required = required
         self.widget = widget
         self.label = label
@@ -301,7 +298,7 @@ class FormLog(models.Model):
 
     def __unicode__(self):
         return "%s (%s)" % (self.form_definition.title or  \
-            self.form_definition.name, self.created) 
+            self.form_definition.name, self.created)
 
     def get_data(self):
         if self._data:
@@ -347,7 +344,7 @@ class FormLog(models.Model):
 
     def save(self, *args, **kwargs):
         super(FormLog, self).save(*args, **kwargs)
-        if self._data: 
+        if self._data:
             # safe form data and then clear temporary variable
             for value in self.values.all():
                 value.delete()
@@ -368,7 +365,7 @@ class FormValue(models.Model):
         value = PickledObjectField(_('value'), null=True, blank=True)
     else:
         # otherwise just use a TextField, with the drawback that
-        # all values will just be stored as unicode strings, 
+        # all values will just be stored as unicode strings,
         # but you can easily query the database for form results.
         value = models.TextField(_('value'), null=True, blank=True)
 
