@@ -49,6 +49,13 @@ class FormDefinition(models.Model):
     message_template = TemplateTextField(_('message template'), help_text=_('Your form fields are available as template context. Example: "{{ message }}" if you have a field named `message`. To iterate over all fields, use the variable `data` (a list containing a dictionary for each form field, each containing the elements `name`, `label`, `value`).'), blank=True, null=True)
     form_template_name = models.CharField(_('form template'), max_length=255, choices=settings.FORM_TEMPLATES, blank=True, null=True)
     display_logged = models.BooleanField(_('display logged submissions with form'), default=False)
+    honeypot_fieldname = models.CharField(
+        _('honeypot fieldname'),
+        blank=True,
+        default='',
+        help_text=_('Use a honeypot field with this name. Leave empty if you do not want a honeypot'),
+        max_length=255,
+    )
 
     class Meta:
         verbose_name = _('Form')

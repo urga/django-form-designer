@@ -28,7 +28,10 @@ class FormDefinitionFieldInline(admin.StackedInline):
 class FormDefinitionAdmin(admin.ModelAdmin):
     fieldsets = [
         (_('Basic'), {'fields': ['name', 'require_hash', 'method', 'action', 'title', 'body']}),
-        (_('Settings'), {'fields': ['allow_get_initial', 'log_data', 'success_redirect', 'redirection_url', 'success_clear', 'display_logged', 'save_uploaded_files'], 'classes': ['collapse']}),
+        (_('Settings'), {'fields': [
+            'allow_get_initial', 'log_data', 'success_redirect', 'redirection_url', 'success_clear',
+            'display_logged', 'save_uploaded_files', 'honeypot_fieldname',
+        ], 'classes': ['collapse']}),
         (_('Mail form'), {'fields': ['mail_to', 'mail_from', 'mail_subject', 'mail_uploaded_files'], 'classes': ['collapse']}),
         (_('Templates'), {'fields': ['message_template', 'form_template_name'], 'classes': ['collapse']}),
         (_('Messages'), {'fields': ['success_message', 'error_message', 'submit_label'], 'classes': ['collapse']}),
@@ -50,7 +53,7 @@ class FormLogAdmin(admin.ModelAdmin):
     for class_path in settings.EXPORTER_CLASSES:
         cls = get_class(class_path)
         if cls.is_enabled():
-            exporter_classes[cls.export_format()] = cls 
+            exporter_classes[cls.export_format()] = cls
             exporter_classes_ordered.append(cls)
 
     def get_exporter_classes(self):
@@ -62,7 +65,7 @@ class FormLogAdmin(admin.ModelAdmin):
         for cls in self.get_exporter_classes():
             desc = _("Export selected %%(verbose_name_plural)s as %s") % cls.export_format()
             actions[cls.export_format()] = (cls.export_view, cls.export_format(), desc)
-            
+
         return actions
 
     # Disabling all edit links: Hack as found at http://stackoverflow.com/questions/1618728/disable-link-to-edit-object-in-djangos-admin-display-list-only
@@ -102,7 +105,7 @@ class FormLogAdmin(admin.ModelAdmin):
         except (TypeError, KeyError):
             query_string = ''
 
-        exporter_links = [] 
+        exporter_links = []
         for cls in self.get_exporter_classes():
             url = reverse('admin:form_designer_export', args=(cls.export_format(),))+query_string
             exporter_links.append({'url': url, 'label': _('Export view as %s') % cls.export_format()})

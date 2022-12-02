@@ -20,8 +20,12 @@ def process_form(request, form_definition, extra_context={}, disable_redirection
     is_submit = False
     # If the form has been submitted...
     if request.method == 'POST' and request.POST.get(form_definition.submit_flag_name):
-        form = DesignedForm(form_definition, None, request.POST, request.FILES)
-        is_submit = True
+        honeypot = request.POST.get(form_definition.honeypot_fieldname)
+        if honeypot:
+            is_submit = False
+        else:
+            form = DesignedForm(form_definition, None, request.POST, request.FILES)
+            is_submit = True
     if request.method == 'GET' and request.GET.get(form_definition.submit_flag_name):
         form = DesignedForm(form_definition, None, request.GET)
         is_submit = True
