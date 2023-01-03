@@ -56,6 +56,7 @@ class FormDefinition(models.Model):
         help_text=_('Use a honeypot field with this name. Leave empty if you do not want a honeypot'),
         max_length=255,
     )
+    recaptcha = models.BooleanField(default=False, help_text=_("Use Google's 'Recaptcha Enterprise' to protect from spam."))
 
     class Meta:
         verbose_name = _('Form')
@@ -128,7 +129,10 @@ class FormDefinition(models.Model):
         created_by = None
         if user and user.is_authenticated():
             created_by = user
-        FormLog(form_definition=self, data=form_data, created_by=created_by).save()
+        spam_score = None
+        if self.recaptcha:
+            spam_score = form.cleaned_data['g-recaptcha-response']
+        FormLog(form_definition=self, data=form_data, created_by=created_by, spam_score=spam_score).save()
 
     def string_template_replace(self, text, context_dict):
         # TODO: refactor, move to utils
@@ -301,6 +305,7 @@ class FormLog(models.Model):
     form_definition = models.ForeignKey(FormDefinition, related_name='logs')
     created = models.DateTimeField(_('Created'), auto_now=True)
     created_by = models.ForeignKey(User, null=True, blank=True)
+    spam_score = models.FloatField(null=True)
     _data = None
 
     def __unicode__(self):

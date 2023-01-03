@@ -30,7 +30,7 @@ class FormDefinitionAdmin(admin.ModelAdmin):
         (_('Basic'), {'fields': ['name', 'require_hash', 'method', 'action', 'title', 'body']}),
         (_('Settings'), {'fields': [
             'allow_get_initial', 'log_data', 'success_redirect', 'redirection_url', 'success_clear',
-            'display_logged', 'save_uploaded_files', 'honeypot_fieldname',
+            'display_logged', 'save_uploaded_files', 'honeypot_fieldname', 'recaptcha',
         ], 'classes': ['collapse']}),
         (_('Mail form'), {'fields': ['mail_to', 'mail_from', 'mail_subject', 'mail_uploaded_files'], 'classes': ['collapse']}),
         (_('Templates'), {'fields': ['message_template', 'form_template_name'], 'classes': ['collapse']}),
@@ -44,7 +44,7 @@ class FormDefinitionAdmin(admin.ModelAdmin):
 
 
 class FormLogAdmin(admin.ModelAdmin):
-    list_display = ('form_no_link', 'created', 'id', 'created_by', 'data_html')
+    list_display = ('form_no_link', 'created', 'id', 'created_by', 'data_html', 'spam_score')
     list_filter = ('form_definition',)
     list_display_links = ()
 

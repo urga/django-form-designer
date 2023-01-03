@@ -7,6 +7,27 @@ from form_designer import settings
 from form_designer.models import FormDefinitionField, FormDefinition
 from form_designer.uploads import clean_files
 from form_designer.utils import get_class
+import json
+import requests
+
+
+class RecaptchaField(forms.CharField):
+    def to_python(self, value):
+        token = super(RecaptchaField, self).to_python(value)
+        api_key = django_settings.GOOGLE_CLOUD_API_KEY
+        project_id = django_settings.GOOGLE_CLOUD_PROJECT_ID
+        url = 'https://recaptchaenterprise.googleapis.com/v1/projects/%s/assessments?key=%s' % (project_id, api_key)
+        body = {
+            "event": {
+                "token": token,
+                "siteKey": django_settings.RECAPTCHA_SITE_KEY,
+                "expectedAction": "submit"
+            }
+        }
+        response = requests.post(url, json=body)
+        r_json = response.json()
+        score = r_json['riskAnalysis']['score']
+        return score
 
 
 class DesignedForm(forms.Form):
@@ -17,6 +38,9 @@ class DesignedForm(forms.Form):
         for def_field in form_definition.formdefinitionfield_set.all():
             self.add_defined_field(def_field, initial_data)
         self.fields[form_definition.submit_flag_name] = forms.BooleanField(required=False, initial=1, widget=widgets.HiddenInput)
+        if form_definition.recaptcha:
+            self.fields['g-recaptcha-response'] = RecaptchaField(
+                required=True, widget=widgets.HiddenInput)
 
     def add_defined_field(self, def_field, initial_data=None):
         if initial_data and def_field.name in initial_data:

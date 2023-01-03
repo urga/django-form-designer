@@ -24,6 +24,10 @@ class FormDesignerPlugin(CMSPluginBase):
             self.render_template = settings.DEFAULT_FORM_TEMPLATE
 
         disable_redirection = 'form_designer.middleware.RedirectMiddleware' not in django_settings.MIDDLEWARE_CLASSES
+        if instance.form_definition.recaptcha:
+            context.update({
+                'recaptcha_site_key': django_settings.RECAPTCHA_SITE_KEY,
+            })
         response = process_form(context['request'], instance.form_definition, context, disable_redirection=disable_redirection)
         if isinstance(response, HttpResponseRedirect):
             raise HttpRedirectException(response, "Redirect")

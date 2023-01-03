@@ -41,7 +41,10 @@ def process_form(request, form_definition, extra_context={}, disable_redirection
             if form_definition.log_data:
                 form_definition.log(form, request.user)
             if form_definition.mail_to:
-                form_definition.send_mail(form, files)
+                if not form_definition.recaptcha:
+                    form_definition.send_mail(form, files)
+                if form_definition.recaptcha and form.cleaned_data['g-recaptcha-response'] > 0.5:
+                    form_definition.send_mail(form, files)
 
             if form_definition.success_redirect and not disable_redirection:
                 if form_definition.redirection_url:
