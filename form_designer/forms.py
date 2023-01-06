@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.conf import settings as django_settings
 from django.utils.translation import ugettext as _
@@ -14,20 +15,29 @@ import requests
 class RecaptchaField(forms.CharField):
     def to_python(self, value):
         token = super(RecaptchaField, self).to_python(value)
+
+        if not token:
+            return None
+
         api_key = django_settings.GOOGLE_CLOUD_API_KEY
         project_id = django_settings.GOOGLE_CLOUD_PROJECT_ID
         url = 'https://recaptchaenterprise.googleapis.com/v1/projects/%s/assessments?key=%s' % (project_id, api_key)
         body = {
             "event": {
-                "token": token,
+                "token": value,
                 "siteKey": django_settings.RECAPTCHA_SITE_KEY,
                 "expectedAction": "submit"
             }
         }
         response = requests.post(url, json=body)
         r_json = response.json()
-        score = r_json['riskAnalysis']['score']
-        return score
+        if r_json['tokenProperties']['valid']:
+            return r_json['riskAnalysis']['score']
+        else:
+            raise ValidationError(
+                r_json['tokenProperties']['invalidReason'],
+                params={'value': value},
+            )
 
 
 class DesignedForm(forms.Form):
